@@ -1,4 +1,4 @@
-// src/App.js
+// client/src/App.js
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Toolbar from "./components/Toolbar";
 
@@ -16,7 +16,9 @@ import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import BlogPage from "./pages/BlogPage";
-import UsersPage from "./pages/UsersPage"; // ⬅️ NAUJA
+
+// NAUJA:
+import UsersPage from "./pages/UsersPage";
 
 export default function App() {
     return (
@@ -34,7 +36,7 @@ export default function App() {
                     <Route path="/news/:name/:id" element={<NewsSinglePage />} />
                     <Route path="/news/new" element={<NewsEditorPage />} />
                     <Route path="/news/edit/:id" element={<NewsEditorPage />} />
-                    <Route path="/users" element={<UsersPage />} /> {/* ⬅️ NAUJA */}
+                    <Route path="/users" element={<UsersPage />} />  {/* <-- vietoje Fruits */}
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/colors" element={<ColorsPage />} />
                     <Route path="/login" element={<LoginPage />} />

@@ -1,8 +1,10 @@
+// client/src/components/Toolbar.js
 import { NavLink, useLocation } from "react-router-dom";
 import { useStore } from "../store/store";
 
 export default function Toolbar() {
     const location = useLocation();
+
     const cart = useStore((s) => s.cart);
     const newsUser = useStore((s) => s.newsUser);
     const newsLogout = useStore((s) => s.newsLogout);
@@ -46,6 +48,5 @@ export default function Toolbar() {
                 </div>
             </nav>
         </header>
-
     );
 }

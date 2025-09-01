@@ -1,9 +1,8 @@
-// src/pages/UsersPage.js
+// client/src/pages/UsersPage.js
 import { useEffect, useState } from "react";
-import styles from "./Contact.module.css"; // pernaudojam kortelių stilius iš Contact
+import styles from "./Users.module.css";
 
-const API = process.env.REACT_APP_API || "http://localhost:2500";
-const API_URL = `${API}/api/blog`;
+const API_URL = process.env.REACT_APP_API || "http://localhost:2500";
 
 async function safeJson(res) {
     const ct = res.headers.get("content-type") || "";
@@ -11,73 +10,75 @@ async function safeJson(res) {
     try { return await res.json(); } catch { return {}; }
 }
 
-function Field({ label, value }) {
-    const v = value ?? "—";
+function Card({ u }) {
+    const dt = u.created_at ? new Date(u.created_at).toLocaleString() : "";
     return (
-        <div className={styles.field}>
-            <span className={styles.fieldLabel}>{label}</span>
-            <span className={styles.fieldValue}>{v || "—"}</span>
+        <div className={styles.card}>
+            <div className={styles.cardHead}>
+                <div className={styles.avatar}>
+                    {u.avatar ? <img src={u.avatar} alt="" /> : (u.userName || "?").slice(0, 1).toUpperCase()}
+                </div>
+                <div className={styles.titleWrap}>
+                    <h3 className={styles.username}>{u.userName}</h3>
+                    <div className={styles.muted}>{u.email}</div>
+                </div>
+            </div>
+
+            <div className={styles.fields}>
+                <div className={styles.field}><span className={styles.fieldLabel}>Telephone</span><span className={styles.fieldValue}>{u.phone || "—"}</span></div>
+                <div className={styles.field}><span className={styles.fieldLabel}>Created</span><span className={styles.fieldValue}>{dt || "—"}</span></div>
+                <div className={styles.field}><span className={styles.fieldLabel}>Total likes</span><span className={styles.fieldValue}>{u.likes_count || 0}</span></div>
+            </div>
         </div>
     );
 }
 
 export default function UsersPage() {
+    const [order, setOrder] = useState("desc");
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState("");
 
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            setErr("");
-            try {
-                console.log("[UsersPage] fetch →", `${API_URL}/users`);
-                const res = await fetch(`${API_URL}/users`);
-                const data = await safeJson(res);
-                console.log("[UsersPage] status", res.status, data);
-                if (!res.ok || data.success === false) throw new Error(data.message || `HTTP ${res.status}`);
-                setUsers(Array.isArray(data.users) ? data.users : []);
-            } catch (e) {
-                console.error("[UsersPage] error:", e);
-                setErr(e.message || "Fetch error");
-                setUsers([]);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
+    useEffect(() => { load(); }, [order]);
+
+    async function load() {
+        setLoading(true);
+        setErr("");
+        try {
+            console.log("[USERS_PAGE] fetch users");
+            const res = await fetch(`${API_URL}/api/blog/users?order=${order}`);
+            const data = await safeJson(res);
+            if (!res.ok || data.success === false) throw new Error(data.message || `HTTP ${res.status}`);
+            setUsers(Array.isArray(data.users) ? data.users : []);
+        } catch (e) {
+            console.error(e);
+            setErr(e.message || "Fetch error");
+            setUsers([]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <div className={styles.page}>
             <header className={styles.header}>
                 <h1>Users</h1>
-                <p>Visi registruoti blog aplikacijos vartotojai.</p>
+                <div className={styles.controls}>
+                    <label>
+                        Order:&nbsp;
+                        <select value={order} onChange={(e) => setOrder(e.target.value)}>
+                            <option value="desc">Newest → Oldest</option>
+                            <option value="asc">Oldest → Newest</option>
+                        </select>
+                    </label>
+                </div>
             </header>
 
-            {loading && <p className={styles.summary}>Loading…</p>}
+            {loading && <p className={styles.info}>Loading…</p>}
             {err && <p className={styles.error}>{err}</p>}
-            {!loading && !err && <p className={styles.summary}>Iš viso: {users.length}</p>}
 
             <div className={styles.grid}>
-                {users.map((u) => (
-                    <div key={u.id} className={styles.card}>
-                        <div className={styles.cardHead}>
-                            <div className={styles.avatar}>
-                                {u.avatar ? <img src={u.avatar} alt="" /> : (u.username || "?").slice(0,1).toUpperCase()}
-                            </div>
-                            <div className={styles.titleWrap}>
-                                <h2 className={styles.username}>{u.username}</h2>
-                                <div className={styles.muted}>{u.city}</div>
-                            </div>
-                        </div>
-
-                        <div className={styles.fields}>
-                            <Field label="E-mail" value={u.email} />
-                            <Field label="Phone" value={u.phone} />
-                            <Field label="Created" value={u.created_at ? new Date(u.created_at).toLocaleString() : ""} />
-                        </div>
-                    </div>
-                ))}
+                {users.map((u) => <Card key={u.id} u={u} />)}
             </div>
         </div>
     );
