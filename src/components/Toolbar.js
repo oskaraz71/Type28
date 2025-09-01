@@ -3,17 +3,12 @@ import { useStore } from "../store/store";
 
 export default function Toolbar() {
     const location = useLocation();
-
-    // iš zustand (News loginams)
-    const cart = useStore((s) => s.cart);                 // [{id, title, price, image, qty}]
-    const newsUser = useStore((s) => s.newsUser);         // { name, secretKey } | null
-    const newsLogout = useStore((s) => s.newsLogout);     // () => void
+    const cart = useStore((s) => s.cart);
+    const newsUser = useStore((s) => s.newsUser);
+    const newsLogout = useStore((s) => s.newsLogout);
 
     const cartQty = cart.reduce((sum, c) => sum + (c.qty || 0), 0);
-    const cartTotal = cart.reduce(
-        (sum, c) => sum + (c.qty || 0) * Number(c.price || 0),
-        0
-    );
+    const cartTotal = cart.reduce((sum, c) => sum + (c.qty || 0) * Number(c.price || 0), 0);
 
     const linkClass = ({ isActive }) => "nav-link" + (isActive ? " active" : "");
 
@@ -27,13 +22,12 @@ export default function Toolbar() {
                     <NavLink to="/news" className={linkClass}>News</NavLink>
                     <NavLink to="/gallery" className={linkClass}>Gallery</NavLink>
                     <NavLink to="/colors" className={linkClass}>Colors</NavLink>
-                    <NavLink to="/fruits" className={linkClass}>Fruits</NavLink>
+                    <NavLink to="/users" className={linkClass}>Users</NavLink>
                     <NavLink to="/blog" className={linkClass}>Blog</NavLink>
                     <NavLink to="/contact" className={linkClass}>Contact</NavLink>
                 </div>
 
                 <div className="right" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    {/* News loginai (kaip buvo) */}
                     {newsUser ? (
                         <>
                             <span className="username">{newsUser.name}</span>
@@ -52,5 +46,6 @@ export default function Toolbar() {
                 </div>
             </nav>
         </header>
+
     );
 }
