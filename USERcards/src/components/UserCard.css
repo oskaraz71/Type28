@@ -1,0 +1,70 @@
+.user-card {
+    display: flex;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 12px;
+    align-items: flex-start;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s;
+    gap: 16px;
+}
+
+.user-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* <-- Tarpas tarp img ir Like */
+}
+
+.user-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Bendras mygtukas */
+.btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Spalvos */
+.btn-like {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}

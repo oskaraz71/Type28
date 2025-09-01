@@ -1,0 +1,183 @@
+/* 95% plotis, kaip galerijoje/shop */
+.page {
+    width: 95%;
+    margin: 20px auto 40px;
+    padding: 0;
+    color: #111;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.header h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    color: #111;
+}
+
+.header p {
+    margin: 0 0 18px;
+    color: #555;
+}
+
+/* Valdikliai viršuje */
+.controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.amountLabel {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.controls input[type="number"] {
+    width: 140px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #001aff;
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.button {
+    padding: 10px 16px;
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: #1e3a8a;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.button:hover {
+    background: #dbeafe;
+}
+
+.button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #b91c1c;
+    margin: 12px 2px 0;
+    font-size: 14px;
+}
+
+.summary {
+    margin: 10px 2px 16px;
+    color: #555;
+}
+
+/* Grid – platesnės kortelės, kad viskas tilptų į vieną eilutę */
+.grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); /* ↑ buvę 260px */
+}
+
+/* Kortelė + šešėliai */
+.card {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    color: #111;
+    overflow: visible; /* nieko nekarpom */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .05), 0 8px 24px rgba(0, 0, 0, .06);
+    transition: box-shadow .2s ease, transform .1s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .08), 0 16px 36px rgba(0, 0, 0, .10);
+    transform: translateY(-2px);
+}
+
+.cardHead {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    background: conic-gradient(from 200deg, #22d3ee, #60a5fa, #8b5cf6, #22d3ee);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), 0 6px 14px rgba(0, 0, 0, .08);
+}
+
+.titleWrap {
+    display: grid;
+    gap: 2px;
+}
+
+.username {
+    margin: 0;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.muted {
+    color: #6b7280;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+
+.fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: 92px auto; /* ↓ siauresnė label kolona */
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb; /* paprasta linija */
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.fieldLabel {
+    color: #6b7280;
+    font-size: 13px;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.fieldValue {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.username {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1e40af;
+    white-space: nowrap;
+}
+
+

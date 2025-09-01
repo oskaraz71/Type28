@@ -1,0 +1,1172 @@
+/* ==== GLOBAL ARIAL ==== */
+:root {
+    --app-font: Arial, Helvetica, sans-serif;
+}
+
+html, body, #root {
+    font-family: var(--app-font);
+}
+
+/* formos paveldi šriftą */
+button, input, select, textarea {
+    font: inherit;
+}
+
+/* ============= THEME TOKENS ============= */
+:root {
+    --bg: #ffffff;
+    --ink: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --soft: #f7f9fc;
+
+    --primary: #2b8a3e;
+    --danger: #e03131;
+    --accent: #2563eb;
+
+    --radius: 12px;
+    --pad: 12px;
+    --gap: 16px;
+
+    --shadow-1: 0 8px 22px rgba(0, 0, 0, .06);
+    --shadow-2: 0 14px 32px rgba(0, 0, 0, .10);
+    --trans: 160ms cubic-bezier(.2, .7, .2, 1);
+}
+
+/* Judesių apribojimas jei reikia */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ============= BASE / UTILITIES ============= */
+* {
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.page {
+    max-width: 95%;
+    margin: 24px auto;
+    padding: 0 16px;
+    color: var(--ink);
+    font-family: "Arial";
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--gap);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* ============= TOOLBAR ============= */
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: saturate(180%) blur(6px);
+}
+
+.toolbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toolbar .left, .toolbar .right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+/* didesnis gap */
+
+.nav-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    padding: 8px 10px;
+    border-radius: 10px;
+    transition: color var(--trans), background var(--trans), transform var(--trans);
+}
+
+.nav-link:hover {
+    color: var(--ink);
+    background: #f3f4f6;
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid #90cdfe;
+    outline-offset: 2px;
+}
+
+.nav-link.active {
+    color: var(--accent);
+    background: #eef2ff;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px #c7d2fe;
+}
+
+.cart-link {
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: transform var(--trans), background var(--trans), border-color var(--trans);
+}
+
+.cart-link:hover {
+    transform: translateY(-1px);
+    background: #f8fafc;
+    border-color: #d1d5db;
+}
+
+/* ============= CARD (PRODUCT LIST) ============= */
+.card.product-card {
+    background: var(--bg);
+    color: inherit;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-1);
+    transition: transform var(--trans), box-shadow var(--trans);
+    cursor: pointer;
+}
+
+.card.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.card-link:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 3px;
+}
+
+.product-media {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.product-media img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.product-body {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.product-body .title {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.3;
+    color: var(--ink);
+}
+
+.product-body .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #374151;
+}
+
+.price {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+/* ============= PRODUCT PAGE (SINGLE) ============= */
+.product-single {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.product-single .media {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.product-single .media img {
+    max-width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+}
+
+.product-single .row {
+    margin-top: 12px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 4px;
+}
+
+.rating .stars {
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+/* ============= BUTTONS ============= */
+.btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: transform var(--trans), background var(--trans), color var(--trans), border-color var(--trans);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn.primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.btn.primary:hover {
+    filter: brightness(0.95);
+}
+
+.btn.danger {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+.btn.danger:hover {
+    filter: brightness(0.95);
+}
+
+/* ============= CART ============= */
+.cart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 92px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    background: var(--bg);
+}
+
+.cart-item .thumb {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+}
+
+.cart-item .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.cart-item input[type="number"] {
+    width: 70px;
+    padding: 6px 8px;
+}
+
+.cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.total {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ============= STORE PAGE WRAPPER (šviesus fonas) ============= */
+.page.store {
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 900px) {
+    .product-single {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar .left {
+        gap: 14px;
+    }
+}
+
+/* ===== NEWS THEME (scoped) ===== */
+.page.news {
+    /* subtilus tamsus fonas, artimas tavo skrinui */
+    background: radial-gradient(1200px 600px at 10% -20%, #0f172a 15%, #0b1226 60%, #0a0f20 100%);
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: 16px;
+    padding: 20px;
+    color: #e5e7eb;
+}
+
+/* viršuje – tabs (All/Favorites) + Sort by vienoje eilėje */
+.page.news .summary {
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+
+.page.news .summary .btn {
+    background: transparent;
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    padding: 8px 14px;
+    transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.page.news .summary .btn:hover {
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.page.news .summary .btn.primary {
+    background: #1e293b;
+    border-color: #334155;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, .25);
+}
+
+/* „Sort by“ valdiklis dešinėje */
+.page.news .summary select {
+    background: #0f172a;
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 10px;
+}
+
+.page.news .summary label {
+    color: #9ca3af;
+}
+
+/* naujienų kortelės – tamsios su gražiu hover */
+.page.news .card.product-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(255, 255, 255, .08);
+    color: #e5e7eb;
+    box-shadow: 0 8px 22px rgba(3, 10, 26, .35);
+}
+
+.page.news .card.product-card:hover {
+    box-shadow: 0 16px 38px rgba(3, 10, 26, .5);
+    transform: translateY(-2px);
+}
+
+.page.news .product-media {
+    background: rgba(255, 255, 255, .03);
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.page.news .product-body .title {
+    color: #fff;
+}
+
+.page.news .muted {
+    color: #9ca3af;
+}
+
+/* mygtukai kortelėje (Like / Favorites) */
+.page.news .card .btn {
+    background: #0f172a;
+    border-color: rgba(255, 255, 255, .12);
+    color: #cbd5e1;
+}
+
+.page.news .card .btn:hover {
+    background: #0b1226;
+    color: #fff;
+}
+
+
+@media (max-width: 900px) {
+    .page.news .summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .page.news .summary .row:first-child {
+        justify-content: flex-start;
+    }
+}
+
+.nav-link.active {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, .15);
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px rgba(96, 165, 250, .35);
+}
+
+.toolbar .left {
+    gap: 24px;
+}
+
+/* Bendras grid išdėstymas (naudojamas Store ir News) */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* Kortelių bendras stilius (product & news) */
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* Kortelės media zona */
+.card .product-media {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* vienodas aukštis */
+    background: #fff;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.card .product-media img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Kortelės turinys */
+.card .product-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card .product-body .title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card .product-body .meta {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page.news .card.product-card {
+    background: #ffffff;
+    border: 1px solid #e9edf3;
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(20, 40, 80, .08);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.page.news .card.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(20, 40, 80, .14);
+    border-color: #dde5f0;
+}
+
+.page.news .product-media {
+    background: #fdfefe;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.page.news .product-body .title {
+    color: #0f172a;
+}
+
+.page.news .muted {
+    color: #6b7280;
+}
+
+/* mygtukai kortelėje (Like / Favorites) */
+.page.news .card .btn {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+    color: #1f2937;
+}
+
+.page.news .card .btn:hover {
+    background: #ffffff;
+    border-color: #d5dde7;
+    box-shadow: 0 6px 14px rgba(25, 60, 120, .08);
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .page.news .summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.page.store,
+.page.news {
+    max-width: none;
+    width: 95%;
+    padding-left: 24px;
+    padding-right: 24px;
+
+}
+
+.page.news {
+    background: #f9fafb; /* labai šviesus */
+    color: #111827;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .05); /* švelnus šešėlis */
+}
+
+.news-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .15s ease, box-shadow .15s ease;
+    cursor: pointer;
+}
+
+.news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+}
+
+.news-card .media {
+    aspect-ratio: 4/3;
+    background: #f1f5f9;
+    display: grid;
+    place-items: center;
+}
+
+.news-card .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.news-card .body {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.news-card .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.news-card .desc {
+    font-size: 14px;
+    color: #374151;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* max 3 eilutės */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.page.news {
+    background: #f9fafb;
+    color: #111827;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.news-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+    color: inherit;
+}
+
+.news-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+}
+
+.news-card .media {
+    aspect-ratio: 4/3;
+    background: #f1f5f9;
+    display: grid;
+    place-items: center;
+}
+
+.news-card .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.news-card .body {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.news-card .title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.news-card .desc {
+    font-size: 14px;
+    color: #374151;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-single {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.news-single .media {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.news-single img {
+    max-width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+}
+
+.news-single .body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.desc-full {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Like mygtukas */
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #fff; /* balta, kai dar nepaspausta */
+}
+
+.like-btn:hover {
+    color: #f87171; /* šviesiai raudona hover efektui */
+}
+
+.like-btn.liked {
+    color: #e11d48; /* raudona kai paspausta */
+}
+
+/* paveikslėliui naujienų kortelėje */
+.news-card img {
+    margin: 5px;
+    border-radius: 4px;
+    display: block;
+    max-width: calc(100% - 10px); /* kad neišliptų už rėmo */
+}
+
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #fff; /* balta, default */
+}
+
+.like-btn:hover {
+    color: #f87171; /* šviesiai raudona */
+}
+
+.like-btn.liked {
+    color: #e11d48; /* ryškiai raudona, kai paspausta */
+}
+
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #000; /* juoda/neutral default */
+}
+
+.like-btn:hover {
+    color: #f87171; /* šviesiai raudona užvedus */
+}
+
+.like-btn.liked {
+    color: #e11d48; /* raudona kai paspausta */
+}
+
+/* Širdelės mygtukas */
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #000; /* juodas kontūras */
+}
+
+.like-btn:hover {
+    color: #f87171; /* šviesiai raudona užvedus */
+}
+
+.like-btn.liked {
+    color: #e11d48; /* ryškiai raudona, kai paspausta */
+}
+
+.like-count {
+    margin-left: 6px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+}
+
+/* paveikslėliui uždėtas margin 5px */
+.news-card .media img {
+    margin: 5px;
+    display: block;
+    max-width: calc(100% - 10px);
+}
+
+/* Mygtukai eilėje */
+.news-card .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Like – keičiasi tik simbolio spalva */
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #000;
+}
+
+.like-btn:hover {
+    color: #f87171;
+}
+
+.like-btn .like-count {
+    margin-left: 6px;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Title eilutė su „Add post“ */
+.page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+/* Auth (Login / Register) */
+.auth-page {
+    display: flex;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 24px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-1);
+    padding: 20px 22px;
+}
+
+.auth-title {
+    margin: 4px 0 16px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    outline: none;
+}
+
+.input:focus {
+    border-color: #c8d6e5;
+    box-shadow: 0 0 0 3px rgba(148, 186, 233, .25);
+}
+
+.form-error {
+    margin: 0;
+    color: #b91c1c;
+    font-size: 14px;
+}
+
+.btn.block {
+    width: 100%;
+}
+
+.auth-switch {
+    margin-top: 12px;
+    color: var(--muted);
+}
+
+.auth-switch a {
+    text-decoration: none;
+}
+
+/* Toolbar */
+nav, .toolbar, .nav-link {
+    font-family: Arial, sans-serif !important;
+}
+
+/* Bendras formų stilius */
+.form-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-family: Arial, sans-serif;
+}
+
+.form-container h1,
+.form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Mygtukai */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: seagreen;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.form-container button:hover {
+    background: #2e7d32;
+}
+
+/* ===== Gallery ===== */
+.page.gallery {
+    max-width: none;
+    width: 95%;
+    margin: 24px auto;
+    padding: 0 24px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+.photo-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .06);
+    transition: transform .15s ease, box-shadow .15s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .10);
+}
+
+.photo-card .media {
+    aspect-ratio: 4/3; /* vienodas aukštis */
+    background: #f8fafc;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.photo-card .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-card .body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.photo-card .author {
+    color: #111827;
+    font-weight: 600;
+}
+
+.photo-card .hd {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.post-card .post-body {
+    text-align: justify !important;
+    text-justify: inter-word;
+}
+
+/* Bazinė juosta */
+.toolbar {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    z-index: 1000;
+}
+
+.toolbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Nuorodos */
+.nav-link {
+    text-decoration: none;
+    color: #444;
+    padding: 6px 8px;
+    border-radius: 8px;
+}
+
+.nav-link:hover {
+    background: #f5f6f7;
+}
+
+.nav-link.active {
+    color: #0b65c2;
+    font-weight: 600;
+    background: #eef5ff;
+}
+
+/* Krepšelis ir mygtukai */
+.cart-link {
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: #f3f6ff;
+    color: #0b65c2;
+    border: 1px solid #e5edff;
+}
+
+.btn {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #f7f7f7;
+}
+
+.username {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Post kortelėms – fiksuotas santykis + cover */
+.post-card .product-media {
+    aspect-ratio: 4 / 3;
+    background: #f1f5f9;
+}
+
+.post-card .product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+
+.page.store,
+.page.news {
+    max-width: none;
+    width: 95%;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
