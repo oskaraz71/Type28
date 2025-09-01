@@ -4,7 +4,6 @@ import { useStore } from "../store/store";
 
 export default function Toolbar() {
     const location = useLocation();
-
     const cart = useStore((s) => s.cart);
     const newsUser = useStore((s) => s.newsUser);
     const newsLogout = useStore((s) => s.newsLogout);

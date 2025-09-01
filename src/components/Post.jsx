@@ -1,5 +1,5 @@
 // src/components/Post.jsx
-console.log("[Post.jsx] LOADED comments+likes bar + top-right owner actions");
+console.log("[Post.jsx] LOADED comments+likes bar + likes modal trigger");
 
 export default function Post({
                                  p,
@@ -8,17 +8,19 @@ export default function Post({
                                  onEdit,
                                  onDelete,
                                  onAuthor,
-                                 onToggleLike,   // toggle like (frontend iškvies /like POST/DELETE)
+                                 onToggleLike,   // toggle like (POST/DELETE /like)
+                                 onShowLikes,    // <-- PASPAUDUS ANT SKAIČIAUS – ATIDARO MODALĄ
                                  currentUserId,  // optional
                              }) {
     const post = p || {};
 
+    // laikas
     const when =
         post.created_at && !Number.isNaN(new Date(post.created_at).getTime())
             ? new Date(post.created_at).toLocaleString()
             : "";
 
-    // prisijungusio naudotojo id (jei nepaduoda per props — paimam iš localStorage)
+    // prisijungusio naudotojo id
     let uid = currentUserId;
     if (!uid) {
         try {
@@ -27,7 +29,7 @@ export default function Post({
         } catch {}
     }
 
-    // likes & comments count (suderinamumas su skirtingais laukais)
+    // likes & comments count
     const likeCount =
         typeof post.likes_count === "number"
             ? post.likes_count
@@ -59,12 +61,13 @@ export default function Post({
         canEdit,
     });
 
-    const open = (e) => {
-        e.preventDefault();
+    // atidaryti post modalą
+    function open(e) {
+        e?.preventDefault?.();
         onView?.(post);
-    };
+    }
 
-    // ikonėlės
+    // širdies SVG
     function HeartIcon({ filled = false, size = 18 }) {
         const color = "#e11d48";
         return (
@@ -84,6 +87,8 @@ export default function Post({
             </svg>
         );
     }
+
+    // komentarų burbulas
     function CommentIcon({ size = 18 }) {
         return (
             <svg
@@ -102,126 +107,47 @@ export default function Post({
             </svg>
         );
     }
-    function PencilIcon({ size = 16 }) {
-        return (
-            <svg
-                width={size}
-                height={size}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#111827"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                style={{ display: "block" }}
-            >
-                <path d="M12 20h9" />
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-            </svg>
-        );
-    }
-    function XIcon({ size = 16 }) {
-        return (
-            <svg
-                width={size}
-                height={size}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#dc2626"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                style={{ display: "block" }}
-            >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-        );
-    }
 
+    // like toggle
     function handleHeartClick(e) {
         e?.preventDefault?.();
         e?.stopPropagation?.();
-        console.log("[Post] heart click", { id: post.id, isLiked });
         if (typeof onToggleLike === "function") onToggleLike(post, isLiked);
     }
 
+    // parodyti, kas palaikino (LIKES MODAL)
+    function handleShowLikes(e) {
+        e?.preventDefault?.();
+        e?.stopPropagation?.();
+        if (typeof onShowLikes === "function") onShowLikes(post);
+    }
+
+    // atidaryti komentarus (per post modalą)
     function openComments(e) {
         e?.preventDefault?.();
         e?.stopPropagation?.();
-        console.log("[Post] open comments", { id: post.id });
-        onView?.(post); // atidaro modalą su komentarais
-    }
-
-    function handleEditClick(e) {
-        e?.preventDefault?.();
-        e?.stopPropagation?.();
-        console.log("[Post] EDIT click", { id: post.id });
-        onEdit?.(post);
-    }
-
-    function handleDeleteClick(e) {
-        e?.preventDefault?.();
-        e?.stopPropagation?.();
-        console.log("[Post] DELETE click", { id: post.id });
-        onDelete?.(post);
+        onView?.(post);
     }
 
     return (
-        <div className="card product-card post-card" style={{ position: "relative" }}>
-            {/* SAVININKO VEIKSMAI – dešinysis viršutinis kampas */}
-            {canEdit && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        display: "inline-flex",
-                        gap: 8,
-                        zIndex: 2,
-                    }}
-                >
-                    <button
-                        type="button"
-                        title="Edit post"
-                        onClick={handleEditClick}
-                        style={{
-                            border: "1px solid #e5e7eb",
-                            background: "#fff",
-                            borderRadius: 8,
-                            padding: 6,
-                            cursor: "pointer",
-                        }}
-                    >
-                        <PencilIcon />
-                    </button>
-                    <button
-                        type="button"
-                        title="Delete post"
-                        onClick={handleDeleteClick}
-                        style={{
-                            border: "1px solid #fecaca",
-                            background: "#fff",
-                            borderRadius: 8,
-                            padding: 6,
-                            cursor: "pointer",
-                        }}
-                    >
-                        <XIcon />
-                    </button>
-                </div>
-            )}
-
-            {/* MEDIA – spaudžiam atidaryti modalą */}
-            <div className="product-media" onClick={open} title="Open" style={{ cursor: "pointer" }}>
+        <div className="card product-card post-card">
+            {/* MEDIA – atidaro post modalą */}
+            <div
+                className="product-media"
+                onClick={open}
+                title="Open"
+                style={{ cursor: "pointer" }}
+            >
                 <img src={post.image_url} alt="" />
             </div>
 
             <div className="product-body">
                 <h3 className="title" style={{ margin: 0 }}>
-                    <a href="#" onClick={open} style={{ textDecoration: "none", color: "inherit" }}>
+                    <a
+                        href="#"
+                        onClick={open}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
                         {post.title}
                     </a>
                 </h3>
@@ -246,11 +172,13 @@ export default function Post({
 
                 {post.description ? (
                     <div className="muted" style={{ fontSize: 13, lineHeight: 1.4 }}>
-                        {post.description.length > 140 ? post.description.slice(0, 140) + "…" : post.description}
+                        {post.description.length > 140
+                            ? post.description.slice(0, 140) + "…"
+                            : post.description}
                     </div>
                 ) : null}
 
-                {/* VEIKSMAI: like kairėje, komentarai dešinėje */}
+                {/* Veiksmai – kairė: ♥ + skaičius (skaičius atidaro likes modalą); dešinė: komentarai */}
                 <div
                     style={{
                         display: "flex",
@@ -259,13 +187,15 @@ export default function Post({
                         justifyContent: "space-between",
                     }}
                 >
-                    {/* Like (♥ + count) KAIRĖJE */}
+                    {/* KAIRĖ: ♥ toggle + SKAIČIUS (skaičius – modalas) */}
                     <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
             <span
                 role="button"
                 tabIndex={0}
                 onClick={handleHeartClick}
-                onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleHeartClick(e)}
+                onKeyDown={(e) =>
+                    (e.key === "Enter" || e.key === " ") && handleHeartClick(e)
+                }
                 title={isLiked ? "Unlike" : "Like"}
                 aria-pressed={isLiked}
                 style={{
@@ -280,25 +210,63 @@ export default function Post({
             >
               <HeartIcon filled={isLiked} />
             </span>
-                        <span style={{ fontSize: 13, color: "#111827", userSelect: "none" }}>{likeCount}</span>
+
+                        {/* SKAIČIUS – paspaudus atidaro likes modalą */}
+                        <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={handleShowLikes}
+                            onKeyDown={(e) =>
+                                (e.key === "Enter" || e.key === " ") && handleShowLikes(e)
+                            }
+                            title="Show who liked"
+                            style={{
+                                fontSize: 13,
+                                color: "#111827",
+                                cursor: "pointer",
+                                userSelect: "none",
+                            }}
+                        >
+              {likeCount}
+            </span>
                     </div>
 
-                    {/* Komentarai (ikonėlė + count) DEŠINĖJE */}
+                    {/* DEŠINĖ: komentarai – atidarom post modalą su komentarais */}
                     <div
                         role="button"
                         tabIndex={0}
                         onClick={openComments}
-                        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openComments(e)}
+                        onKeyDown={(e) =>
+                            (e.key === "Enter" || e.key === " ") && openComments(e)
+                        }
                         title="Show comments"
-                        style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer" }}
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            cursor: "pointer",
+                        }}
                     >
                         <CommentIcon />
-                        <span style={{ fontSize: 13, color: "#111827", userSelect: "none" }}>{commentsCount}</span>
+                        <span style={{ fontSize: 13, color: "#111827", userSelect: "none" }}>
+              {commentsCount}
+            </span>
                     </div>
                 </div>
 
-                {/* (Apačios Edit/Delete mygtukus panaikinau — dabar ikonėlės viršuje) */}
+                {/* Edit/Delete – jei gali redaguoti */}
+                {canEdit && (
+                    <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                        <button className="btn" onClick={() => onEdit?.(post)}>
+                            Edit
+                        </button>
+                        <button className="btn danger" onClick={() => onDelete?.(post)}>
+                            Delete
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
+
