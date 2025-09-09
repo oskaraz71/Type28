@@ -1,43 +1,35 @@
-import { useEffect } from "react";
-import { useStore } from "../store/store";
+// src/pages/StorePage.jsx
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
 import ProductCard from "../components/ProductCard";
+import "./StorePage.css";
 
 export default function StorePage() {
-    const products = useStore((s) => s.products);
-    const status = useStore((s) => s.productsStatus);
-    const error = useStore((s) => s.productsError);
-    const fetchProducts = useStore((s) => s.fetchProducts);
+    const [rows, setRows] = useState([]);
+    const [status, setStatus] = useState("idle"); // idle|loading|success|error
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        if (status === "idle") fetchProducts();
-    }, [status, fetchProducts]);
-
-    if (status === "loading") {
-        return (
-            <main className="page">
-                <h1>Store</h1>
-                <p>Loading products…</p>
-            </main>
-        );
-    }
-
-    if (status === "error") {
-        return (
-            <main className="page">
-                <h1>Store</h1>
-                <p>Failed to load products: {error}</p>
-            </main>
-        );
-    }
+        let alive = true;
+        setStatus("loading");
+        fetch(api.products.list())
+            .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+            .then(data => { if (!alive) return; setRows(Array.isArray(data) ? data : (data?.data || [])); setStatus("success"); })
+            .catch(e => { if (!alive) return; setError(e.message || "Failed to load"); setStatus("error"); });
+        return () => { alive = false; };
+    }, []);
 
     return (
         <main className="page store">
             <h1>Store</h1>
+            {status === "loading" && <p>Loading products…</p>}
+            {status === "error" && <p className="error">Failed to load: {error}</p>}
+
             <section className="grid">
-                {products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                ))}
+                {rows.map(p => <ProductCard key={p.id || p._id} p={p} />)}
             </section>
+
+            {status === "success" && rows.length === 0 && <p className="muted">No products yet.</p>}
         </main>
     );
 }

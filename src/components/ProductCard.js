@@ -1,25 +1,23 @@
+// src/components/ProductCard.jsx
 import { Link } from "react-router-dom";
+import "./ProductCard.css";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ p }) {
+    const id = p.id || p._id;
     return (
-        <Link
-            to={`/shop/product/${product.id}`}
-            state={{ product }}                          //prekė iš nufetchinto sarašo
-            className="card-link"
-            style={{ textDecoration: "none", color: "inherit" }}
-        >
-            <div className="card product-card">
-                <div className="product-media">
-                    <img src={product.image} alt={product.title} loading="lazy" />
-                </div>
-                <div className="product-body">
-                    <h4 className="title">{product.title}</h4>
-                    <div className="meta">
-                        <span className="price">${Number(product.price).toFixed(2)}</span>
-                        <span className="category">{product.category}</span>
-                    </div>
+        <article className="product-card">
+            <div className="product-card__imgwrap">
+                <img src={p.image_url} alt={p.name} className="product-card__img" />
+            </div>
+
+            <div className="product-card__body">
+                <h3 className="product-card__title">{p.name}</h3>
+                <div className="product-card__price">€ {Number(p.price || 0).toFixed(2)}</div>
+                <div className="product-card__actions">
+                    <Link className="btn" to={`/shop/product/${id}`}>View</Link>
+                    <Link className="btn btn--ghost" to={`/shop/product/${id}?reserve=1`}>Reserve</Link>
                 </div>
             </div>
-        </Link>
+        </article>
     );
 }

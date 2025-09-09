@@ -1,99 +1,63 @@
+// src/pages/ProductPage.jsx
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { useStore } from "../store/store";
-
-function renderStars(rate = 0) {
-    // 0–5 žvaigždutės su pusėmis (naudojam pilną/tuščią; jei nori pusinių – praplėsim)
-    const full = Math.round(rate);
-    return "★★★★★".slice(0, full) + "☆☆☆☆☆".slice(full);
-}
+import { useParams, useSearchParams } from "react-router-dom";
+import { api } from "../lib/api";
+import ReserveModal from "../components/ReserveModal";
+import "./ProductPage.css";
 
 export default function ProductPage() {
     const { id } = useParams();
-    const { state } = useLocation();
-    const [loading, setLoading] = useState(false);
-    const [err, setErr] = useState(null);
-    const [qty, setQty] = useState(1);
+    const [params] = useSearchParams();
+    const openReserve = params.get("reserve") === "1";
 
-    const getProductById = useStore((s) => s.getProductById);
-    const fetchSingleProduct = useStore((s) => s.fetchSingleProduct);
-    const addToCart = useStore((s) => s.addToCart);
+    const [product, setProduct] = useState(null);
+    const [status, setStatus] = useState("idle");
+    const [error, setError] = useState("");
+    const [reserveOpen, setReserveOpen] = useState(openReserve);
 
-    const initial = state?.product;
-    const fromStore = useMemo(() => getProductById(id), [getProductById, id]);
-    const product = initial || fromStore;
+    useEffect(() => setReserveOpen(openReserve), [openReserve]);
 
     useEffect(() => {
-        if (product) return;
         let alive = true;
-        setLoading(true);
-        setErr(null);
-        fetchSingleProduct(id)
-            .catch((e) => alive && setErr(e.message))
-            .finally(() => alive && setLoading(false));
-        return () => (alive = false);
-    }, [id, product, fetchSingleProduct]);
+        setStatus("loading");
+        fetch(api.products.one(id))
+            .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+            .then(data => { if (!alive) return; setProduct(data?.data || data); setStatus("success"); })
+            .catch(e => { if (!alive) return; setError(e.message || "Failed to load"); setStatus("error"); });
+        return () => { alive = false; };
+    }, [id]);
 
-    if (loading || !product) {
-        return (
-            <main className="page">
-                <h1>Product</h1>
-                {err ? <p>Failed to load: {err}</p> : <p>Loading…</p>}
-            </main>
-        );
-    }
-
-    const { title, price, description, category, image, rating } = product;
-    const rate = Number(rating?.rate || 0);
-    const count = Number(rating?.count || 0);
-
-    const onAdd = () => {
-        const q = Math.max(1, Math.floor(Number(qty) || 1));
-        addToCart(product, q);
-        setQty(1);
-    };
+    const price = useMemo(() => Number(product?.price || 0).toFixed(2), [product]);
 
     return (
-        <main className="page">
-            <h1>{title}</h1>
-
-            <div className="product-single">
-                <div className="media">
-                    <img src={image} alt={title} />
-                </div>
-
-                <div className="info">
-                    <p className="price">€{Number(price).toFixed(2)}</p>
-                    <p className="category"><strong>Category:</strong> {category}</p>
-
-                    {/* RATING */}
-                    <div className="rating" aria-label={`Rating ${rate} out of 5 from ${count} reviews`}>
-            <span className="stars" style={{ fontSize: 20, letterSpacing: 2 }}>
-              {renderStars(rate)}
-            </span>
-                        <span style={{ marginLeft: 8 }}>
-              {rate.toFixed(1)} / 5 · {count} reviews
-            </span>
+        <main className="page product-page">
+            {status === "loading" && <p>Loading…</p>}
+            {status === "error" && <p className="error">Failed to load: {error}</p>}
+            {status === "success" && product && (
+                <>
+                    <div className="product">
+                        <div className="product__imgwrap">
+                            <img className="product__img" src={product.image_url} alt={product.name} />
+                        </div>
+                        <div className="product__body">
+                            <h1>{product.name}</h1>
+                            <div className="product__price">€ {price}</div>
+                            {product.description && (
+                                <p className="product__desc">{product.description}</p>
+                            )}
+                            <div className="actions">
+                                <button className="btn" onClick={() => setReserveOpen(true)}>Reserve</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <p className="desc">{description}</p>
-
-                    <div className="row">
-                        <label htmlFor="qty">Qty:</label>
-                        <input
-                            id="qty"
-                            type="number"
-                            min="1"
-                            value={qty}
-                            onChange={(e) => setQty(e.target.value)}
-                            style={{ width: 80 }}
-                        />
-                        <button className="btn primary" onClick={onAdd}>
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-            </div>
+                    <ReserveModal
+                        open={reserveOpen}
+                        onClose={() => setReserveOpen(false)}
+                        product={product}
+                    />
+                </>
+            )}
         </main>
     );
 }

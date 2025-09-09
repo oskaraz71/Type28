@@ -135,8 +135,10 @@ img {
 
 .cart-link {
     text-decoration: none;
+    white-space: nowrap;
     padding: 8px 12px;
     border: 1px solid var(--border);
+
     border-radius: 999px;
     transition: transform var(--trans), background var(--trans), border-color var(--trans);
 }
@@ -1121,19 +1123,11 @@ textarea {
 }
 
 /* Krepšelis ir mygtukai */
-.cart-link {
-    text-decoration: none;
-    font-weight: 600;
-    padding: 6px 10px;
-    border-radius: 10px;
-    background: #f3f6ff;
-    color: #0b65c2;
-    border: 1px solid #e5edff;
-}
+
 
 .btn {
     border: 1px solid #ddd;
-    background: #fff;
+    background: #a6d8fd;
     padding: 6px 10px;
     border-radius: 8px;
     cursor: pointer;
@@ -1168,5 +1162,37 @@ textarea {
     width: 95%;
     padding-left: 24px;
     padding-right: 24px;
+}
+
+.market-subnav {
+    position: sticky;
+    top: 48px;
+    z-index: 5;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #f8fafc;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.subnav-link {
+    padding: 8px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #111827;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+}
+
+.subnav-link.active {
+    border-color: #2563eb;
+    color: #1e40af;
+    background: #eef2ff;
+}
+
+.subnav-money {
+    margin-left: auto;
+    font-weight: 700;
 }
 

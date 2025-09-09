@@ -1,0 +1,10 @@
+.page.store { padding: 20px; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.error { color: #b91c1c; }
+.muted { color: #6b7280; }

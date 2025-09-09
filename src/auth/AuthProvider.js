@@ -1,85 +1,87 @@
-// React project: src/auth/AuthProvider.js
+// src/auth/AuthProvider.js
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { loginApi, registerApi, meApi } from "../services/authApi";
+import { loginApi, registerApi } from "../services/authApi";
 
-const AuthContext = createContext({
+const LS_TOKEN = "blogToken"; // tie patys raktai kaip BlogPage
+const LS_USER  = "blogUser";
+
+const Ctx = createContext({
     user: null,
     token: null,
-    loading: false,
+    loading: true,
     login: async () => {},
     register: async () => {},
     logout: () => {},
+    updateUser: async () => {},   // 👈 pridėta į kontekstą
 });
-
-// LocalStorage raktas
-const LS_KEY = "auth";
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // įkeliam iš localStorage
+    // load iš blogo raktų
     useEffect(() => {
         try {
-            const raw = localStorage.getItem(LS_KEY);
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (parsed?.token) {
-                    setToken(parsed.token);
-                    setUser(parsed.user || null);
-                }
-            }
+            const t = localStorage.getItem(LS_TOKEN) || "";
+            const raw = localStorage.getItem(LS_USER);
+            const u = raw ? JSON.parse(raw) : null;
+            if (t) setToken(t);
+            if (u) setUser(u);
         } catch {}
         setLoading(false);
     }, []);
 
-    // išsaugom į localStorage
+    // persist taip pat kaip BlogPage
     useEffect(() => {
-        localStorage.setItem(LS_KEY, JSON.stringify({ user, token }));
+        try {
+            if (token) localStorage.setItem(LS_TOKEN, token); else localStorage.removeItem(LS_TOKEN);
+            if (user)  localStorage.setItem(LS_USER, JSON.stringify(user)); else localStorage.removeItem(LS_USER);
+        } catch {}
     }, [user, token]);
 
     async function login({ email, password }) {
-        const data = await loginApi({ email, password }); // tikimės { user, token }
-        setUser(data.user || null);
-        setToken(data.token || null);
-        return data;
+        const d = await loginApi({ email, password }); // { token, user }
+        if (!d?.token) throw new Error("Token missing");
+        setToken(d.token);
+        setUser(d.user || null);
+        localStorage.setItem(LS_TOKEN, d.token);
+        localStorage.setItem(LS_USER, JSON.stringify(d.user || null));
+        return d;
     }
 
-    async function register({ username, email, password }) {
-        const data = await registerApi({ username, email, password }); // { user, token } ar pan.
-        setUser(data.user || null);
-        setToken(data.token || null);
-        return data;
+    async function register({ email, passwordOne, passwordTwo }) {
+        const d = await registerApi({ email, passwordOne, passwordTwo }); // { token, user }
+        if (!d?.token) throw new Error("Token missing");
+        setToken(d.token);
+        setUser(d.user || null);
+        localStorage.setItem(LS_TOKEN, d.token);
+        localStorage.setItem(LS_USER, JSON.stringify(d.user || null));
+        return d;
     }
 
     function logout() {
         setUser(null);
         setToken(null);
-        localStorage.removeItem(LS_KEY);
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_USER);
     }
 
-    // Pasirinktinai – pasitikrinimas /api/auth/me (jei turi endpointą)
-    async function refresh() {
-        if (!token) return null;
-        try {
-            const data = await meApi(token);
-            setUser(data?.user || null);
-            return data;
-        } catch {
-            logout();
-            return null;
-        }
+    // ✅ NAUJA: local profile update (kol kas be serverio)
+    async function updateUser(patch) {
+        setUser((prev) => {
+            const next = { ...(prev || {}), ...patch };
+            try { localStorage.setItem(LS_USER, JSON.stringify(next)); } catch {}
+            return next;
+        });
+        return { ok: true };
     }
 
-    const value = useMemo(
-        () => ({ user, token, loading, login, register, logout, refresh }),
-        [user, token, loading]
-    );
+    const value = useMemo(() => ({
+        user, token, loading, login, register, logout, updateUser
+    }), [user, token, loading]);
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useAuth() {
-    return useContext(AuthContext);
-}
+export function useAuth() { return useContext(Ctx); }
